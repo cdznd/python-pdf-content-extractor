@@ -48,6 +48,23 @@ text = extractor.extract_text("path/to/file.pdf", page_limit=5)
   <img src="assets/demonstration.gif" alt="Progress Bar Demonstration" width="700">
 </p>
 
+## Comparison: PDF vs Extracted Text
+
+See how the tool effectively extracts text content from PDF documents:
+
+<p align="center">
+  <table>
+    <tr>
+      <td><b>Original PDF</b></td>
+      <td><b>Extracted Text</b></td>
+    </tr>
+    <tr>
+      <td><img src="assets/pdf_version.png" alt="Original PDF" width="400"></td>
+      <td><img src="assets/txt_version.png" alt="Extracted Text" width="400"></td>
+    </tr>
+  </table>
+</p>
+
 ## Project Structure
 
 ```
