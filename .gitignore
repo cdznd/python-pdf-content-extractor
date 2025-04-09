@@ -1,2 +1,3 @@
 *.egg-info
 files/
+.DS_Store
