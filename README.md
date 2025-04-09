@@ -44,6 +44,10 @@ text = extractor.extract_text("path/to/file.pdf", page_limit=5)
 
 - **Progress Bars**: The tool uses `tqdm` to display real-time progress bars, showing both overall PDF processing progress and page extraction progress with estimated completion times.
 
+<p align="center">
+  <img src="assets/demonstration.gif" alt="Progress Bar Demonstration" width="700">
+</p>
+
 ## Project Structure
 
 ```
