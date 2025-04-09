@@ -53,7 +53,6 @@ def process_pdfs(read_from: str, save_to: str, limit: Optional[int] = None) -> N
         except Exception as e:
             print(f"Failed to process {pdf_path}: {e}")
 
-
 def main() -> None:
     """Main entry point for the CLI application."""
     parser = argparse.ArgumentParser(description='PDF Content Extractor')
@@ -61,14 +60,14 @@ def main() -> None:
     parser.add_argument(
         "--read-from",
         type=str,
-        default="./pdf_source",
+        default="./files/pdf_source",
         help="Source directory containing PDF files to extract"
     )
     
     parser.add_argument(
         "--save-to",
         type=str,
-        default="./extracted_content",
+        default="./files/extracted_content",
         help="Destination directory for extracted PDF content"
     )
     
