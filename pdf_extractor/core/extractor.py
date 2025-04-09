@@ -1,6 +1,7 @@
 import fitz
 import os
 from typing import Optional
+from tqdm import tqdm
 
 
 class PDFExtractor:
@@ -32,13 +33,20 @@ class PDFExtractor:
             if page_limit is not None:
                 num_pages = min(num_pages, page_limit)
                 
-            print(f"Processing {num_pages} pages from {pdf_path}")
-
-            # Extract text from each page
+            # Extract text from each page with enhanced progress bar
             text = ""
-            for page_num in range(num_pages):
-                page = doc.load_page(page_num)
-                text += page.get_text()
+            with tqdm(
+                total=num_pages,
+                desc="📄 Extracting pages",
+                unit="page",
+                bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]",
+                ncols=80,
+                colour="green"
+            ) as pbar:
+                for page_num in range(num_pages):
+                    page = doc.load_page(page_num)
+                    text += page.get_text()
+                    pbar.update(1)
         
             # Close the document
             doc.close()

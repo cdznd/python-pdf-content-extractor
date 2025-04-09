@@ -40,6 +40,10 @@ print(text)
 text = extractor.extract_text("path/to/file.pdf", page_limit=5)
 ```
 
+## Features
+
+- **Progress Bars**: The tool uses `tqdm` to display real-time progress bars, showing both overall PDF processing progress and page extraction progress with estimated completion times.
+
 ## Project Structure
 
 ```
@@ -64,6 +68,7 @@ pdf-extractor/
 
 - Python 3.7+
 - PyMuPDF (for PDF processing)
+- tqdm (for progress visualization)
 
 ## License
 
