@@ -1,0 +1,8 @@
+"""
+Command-line script for PDF Extractor
+"""
+
+from pdf_extractor.cli.commands import main
+
+if __name__ == "__main__":
+    main() 
