@@ -6,6 +6,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "PyMuPDF", # runtime dependencies
+        "tqdm"
     ],
     entry_points={
         "console_scripts": [
@@ -13,8 +14,8 @@ setup(
         ],
     },
     python_requires=">=3.7",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="Fabricio",
+    author_email="floyd9732@gmail.com",
     description="A tool for extracting text content from PDF files",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
