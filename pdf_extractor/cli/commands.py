@@ -2,12 +2,16 @@ import sys
 import os
 import argparse
 from typing import Optional
-from tqdm import tqdm
 
-from pdf_extractor.core.extractor import PDFExtractor
+from pdf_extractor.processing.worker import process_and_save_pdfs
 
 
-def process_pdfs(read_from: str, save_to: str, limit: Optional[int] = None) -> None:
+def process_pdfs(
+    read_from: str,
+    save_to: str,
+    single_file: str,
+    limit: Optional[int] = None
+) -> None:
     """
     Process all PDF files in a directory and save their extracted text.
     
@@ -16,56 +20,37 @@ def process_pdfs(read_from: str, save_to: str, limit: Optional[int] = None) -> N
         save_to: Destination directory for extracted text files
         limit: Optional limit on the number of pages to extract per PDF
     """
+
     # Check if source dir exists
     if not os.path.isdir(read_from):
-        print(f"Error: The source directory '{read_from}' does not exist.")
+        print(f"Error: The source directory '{read_from}' does not exist and no file specified.")
         sys.exit(1)
+
+    # Check if it should be batch extraction or single file extraction
+    if single_file:
+        pdf_path = os.path.join(read_from, single_file)
+        print(f'pdf_path: {pdf_path}')
+        if not os.path.isfile(pdf_path):
+            print(f"Error: The specified file '{single_file}' does not exist in '{read_from}'.")
+            sys.exit(1)
+        pdf_files = [single_file]
+    else:
+        # Get all PDF files from the source dir
+        pdf_files = [file for file in os.listdir(read_from) if file.lower().endswith('.pdf')]
+
+    if not pdf_files:
+        print(f"No PDF files found in '{read_from}'")
+        sys.exit()
 
     # Create the output directory if it doesn't exist
     os.makedirs(save_to, exist_ok=True)
 
-    # Get all PDF files from the source dir
-    pdf_files = [file for file in os.listdir(read_from) if file.lower().endswith('.pdf')]
-    
-    if not pdf_files:
-        print(f"No PDF files found in '{read_from}'")
-        return
-
-    extractor = PDFExtractor()
-    
-    # Process PDFs with enhanced progress bar
-    with tqdm(
-        total=len(pdf_files),
-        desc="📚 Processing PDFs",
-        unit="file",
-        bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]",
-        ncols=80,
-        colour="blue",
-        position=0,
-        leave=True
-    ) as pbar:
-        for pdf_file in pdf_files:
-            pdf_path = os.path.join(read_from, pdf_file)
-            
-            try:
-                # Extract text from the PDF
-                text = extractor.extract_text(pdf_path=pdf_path, page_limit=limit)
-                
-                # The name before .pdf
-                base_name = os.path.splitext(pdf_file)[0]
-                output_file = os.path.join(save_to, f"{base_name}.txt")
-                
-                # Save text to file
-                with open(output_file, 'w', encoding='utf-8') as f:
-                    f.write(text)
-                
-                # Update progress bar description with current file
-                pbar.set_description(f"📚 Processing: {pdf_file}")
-                pbar.update(1)
-                    
-            except Exception as e:
-                print(f"\n❌ Failed to process {pdf_path}: {e}")
-                pbar.update(1)  # Still update progress even on error
+    process_and_save_pdfs(
+        pdf_files=pdf_files,
+        read_from=read_from,
+        save_to=save_to,
+        limit=limit
+    )
 
 def main() -> None:
     """Main entry point for the CLI application."""
@@ -84,6 +69,13 @@ def main() -> None:
         default="./files/extracted_content",
         help="Destination directory for extracted PDF content"
     )
+
+    parser.add_argument(
+        "--single-file",
+        type=str,
+        default=None,
+        help="Limit to extract only the first file of a directory"
+    )
     
     parser.add_argument(
         "--limit",
@@ -91,12 +83,13 @@ def main() -> None:
         default=None,
         help="Limit the number of pages to extract per PDF"
     )
-    
+
     args = parser.parse_args()
 
     # Process the PDFs
     process_pdfs(
         read_from=args.read_from,
         save_to=args.save_to,
+        single_file=args.single_file,
         limit=args.limit
     ) 

@@ -3,7 +3,6 @@ import os
 from typing import Optional
 from tqdm import tqdm
 
-
 class PDFExtractor:
     """
     A class for extracting text content from PDF files.
