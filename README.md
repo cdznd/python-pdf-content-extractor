@@ -90,7 +90,3 @@ pdf-extractor/
 - Python 3.7+
 - PyMuPDF (for PDF processing)
 - tqdm (for progress visualization)
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
